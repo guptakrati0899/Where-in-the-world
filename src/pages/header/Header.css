@@ -1,0 +1,29 @@
+.header {
+  position: fixed;
+  width: auto;
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  box-shadow: 0px 2px 4px 0px #0000000E;
+  padding: 0px 80px;
+  left: 0;
+  right: 0;
+  z-index: 99999;
+}
+
+.headerName {
+  font-family: Nunito Sans;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 32.74px;
+  text-align: left;
+  color: #111517;
+}
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
