@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./HomePage.css";
 import FormControl from "@mui/material/FormControl";
 import {
@@ -13,24 +13,42 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import axios from "axios";
+import { lightBlue } from "@mui/material/colors";
+import { Link, useNavigate } from "react-router-dom";
+import { useData } from "../../DataContext";
 
-const HomePage = () => {
-  const [age, setAge] = React.useState("");
+const HomePage = ({ darkMode }) => {
+  const [data, setData] = useState([]);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  useEffect(() => {
+    axios
+      .get("https://restcountries.com/v3.1/all")
+      .then((response) => {
+        // Do something with the data
+        setData(response.data);
+        console.log("dataa", response.data);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
+
+  const navigate = useNavigate();
+  const { setCountryData } = useData();
+
+  const handleClick = (country) => {
+    setCountryData(country);
+    navigate("/detailsPage");
   };
+
+  const fallbackImageUrl =
+    "https://cdn.touchdynamic.com/wp-content/uploads/2015/11/bigstock-Demo-77033156small.jpg";
+
   return (
-    <div className="homePageContainer">
+    <div className={darkMode ? "homePageContainer dark" : "homePageContainer"}>
       <div className="filterContainer">
         <TextField defaultValue="Hello World" />
         <FormControl sx={{ minWidth: 120 }}>
-          <Select
-            value={age}
-            onChange={handleChange}
-            displayEmpty
-            inputProps={{ "aria-label": "Without label" }}
-          >
+          <Select displayEmpty inputProps={{ "aria-label": "Without label" }}>
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
@@ -50,26 +68,38 @@ const HomePage = () => {
             lg: "repeat(4, 1fr)",
           }}
         >
-          {Array.from(Array(6)).map((_, index) => (
-            <Card sx={{ width: 264 }}>
+          {data.map((country, index) => (
+            <Card className={darkMode?"carddarkMode":""}
+              key={index}
+              sx={{
+                width: 264,
+                transition: "box-shadow 0.3s",
+                "&:hover": {
+                  boxShadow: "0px 4px 6px lightBlue",
+                  cursor: "pointer"
+                },
+              }}
+              onClick={() => handleClick(country)}
+            >
               <CardMedia
                 sx={{ height: 160 }}
-                image="https://wallup.net/wp-content/uploads/2019/10/507734-india-flag-flags-indian.jpg"
-                title="green iguana"
+                image={country?.coatOfArms?.png || fallbackImageUrl}
               />
               <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Lizard
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Lizards are a widespread group of squamate reptiles, with over
-                  6,000 species, ranging across all continents except Antarctica
-                </Typography>
+                <span className="countryName">{country?.name?.common}</span>
+                <div className="countryContent">
+                  <span className="subHead">Population: </span>
+                  <span className="subDesc">{country?.population}</span>
+                </div>
+                <div className="countryContent">
+                  <span className="subHead">Region: </span>
+                  <span className="subDesc">{country?.region}</span>
+                </div>
+                <div className="countryContent">
+                  <span className="subHead">Capital: </span>
+                  <span className="subDesc">{country?.capital}</span>
+                </div>
               </CardContent>
-              <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
-              </CardActions>
             </Card>
           ))}
         </Box>
