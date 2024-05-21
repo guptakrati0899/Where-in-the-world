@@ -10,77 +10,64 @@ const DetailsPage = ({ darkMode }) => {
     "https://cdn.touchdynamic.com/wp-content/uploads/2015/11/bigstock-Demo-77033156small.jpg";
   const { countryData } = useData();
   const navigate = useNavigate();
-  console.log("wjdwjdwe", countryData);
+  const {
+    name,
+    coatOfArms,
+    population,
+    region,
+    subregion,
+    capital,
+    tld,
+    currencies,
+    languages,
+    borders,
+  } = countryData || {};
 
   return (
-    <div className={darkMode ? "detailsPage dark" : "detailsPage"}>
+    <div className={`detailsPage ${darkMode ? "dark" : ""}`}>
       <img
-        src={darkMode? BackIconDarkMode: BackIcon}
+        src={darkMode ? BackIconDarkMode : BackIcon}
         className="clickable"
         alt="Back Icon"
         onClick={() => navigate("/")}
       />
       <div className="detailsContainer">
-        <img
-          className="countryImg"
-          src={countryData?.coatOfArms?.png || fallbackImageUrl}
-        />
+        <img className="countryImg" src={coatOfArms?.png || fallbackImageUrl} alt="Country Coat of Arms" />
         <div className="details">
-          <span className="countryTitle">{countryData?.name?.common}</span>
+          <span className="countryTitle">{name?.common}</span>
           <div className="countryDetails">
             <div>
-              <div>
-                <span className="heading">Native Name: </span>
-                <span className="description">
-                  {countryData?.name?.nativeName?.official}
-                </span>
-              </div>
-              <div>
-                <span className="heading">Population: </span>
-                <span className="description">{countryData?.population}</span>
-              </div>
-              <div>
-                <span className="heading">Region: </span>
-                <span className="description">{countryData?.region}</span>
-              </div>
-              <div>
-                <span className="heading">Sub Region: </span>
-                <span className="description">{countryData?.subregion}</span>
-              </div>
-              <div>
-                <span className="heading">Capital: </span>
-                <span className="description">{countryData?.capital}</span>
-              </div>
+              <DetailRow heading="Native Name:" description={name?.nativeName?.official} />
+              <DetailRow heading="Population:" description={population} />
+              <DetailRow heading="Region:" description={region} />
+              <DetailRow heading="Sub Region:" description={subregion} />
+              <DetailRow heading="Capital:" description={capital} />
             </div>
             <div>
-              <div>
-                <span className="heading">Top Level Domain: </span>
-                <span className="description">{countryData?.tld}</span>
-              </div>
-              <div>
-                <span className="heading">Currencies: </span>
-                <span className="description">
-                  {Object.values(countryData?.currencies)[0]?.name}
-                </span>
-              </div>
-              <div>
-                <span className="heading">Languages: </span>
-                <span className="description">
-                  {Object.values(countryData?.languages)[0]}
-                </span>
-              </div>
+              <DetailRow heading="Top Level Domain:" description={tld} />
+              <DetailRow heading="Currencies:" description={currencies && Object.values(currencies)[0]?.name} />
+              <DetailRow heading="Languages:" description={languages && Object.values(languages)[0]} />
             </div>
           </div>
           <div className="container">
-            <span className="heading">Border Countries: </span>
-            {countryData?.borders?.map((label, index) => (
-              <button className={darkMode?"bordersButton dark":"bordersButton"} key={index}>
+            <span className="heading">Border Countries:</span>
+            {borders?.map((label, index) => (
+              <button className={`bordersButton ${darkMode ? "dark" : ""}`} key={index}>
                 {label}
               </button>
             ))}
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const DetailRow = ({ heading, description }) => {
+  return (
+    <div>
+      <span className="heading">{heading}</span>
+      <span className="description">{description}</span>
     </div>
   );
 };

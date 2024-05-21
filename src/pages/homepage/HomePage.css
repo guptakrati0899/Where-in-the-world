@@ -13,6 +13,11 @@
     color: white;
 }
 
+.homePageContainer.dark .MuiMenu-list {
+    background-color: #202C36;
+    color: white;
+}
+
 .filterContainer {
   display: flex;
   justify-content: space-between;
@@ -45,4 +50,30 @@
 .carddarkMode {
     background-color: #2B3844 !important;
     color: white !important;
+}
+
+.filterRegion {
+    width: 200px;
+    height: 56px;
+}
+
+.filterRegion.dark {
+    background-color: #2B3844 !important;
+    color: white !important;
+}
+
+
+.menuDark {
+    background-color: #2B3844 !important;
+    color: white !important;
+}
+
+.MuiMenu-list {
+    padding: 0 !important;
+}
+
+.searchDark input {
+    color: white !important;
+    background-color: #2B3844 !important;
+    border-radius: 6px;
 }
